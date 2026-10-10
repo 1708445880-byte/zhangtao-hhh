@@ -44,6 +44,8 @@ python scripts/browser-check.py
 
 ## 发布状态
 
-发布目标为当前公开仓库的 GitHub Pages，使用生成站点的 `gh-pages` 分支。源码与生成页面是独立分支。必须在仓库 Settings → Pages 中将 Source 设为 Deploy from a branch，Branch 设为 `gh-pages`，目录设为 `/ (root)` 并保存，GitHub 才会启用公网网站。
+网站已发布到：https://1708445880-byte.github.io/zhangtao-hhh/
 
-目标地址仅在 Pages 已成功启用、构建并实际验证后才能视为可用网址：`https://1708445880-byte.github.io/zhangtao-hhh/`。本地检查和代码上传均不代表公网发布成功；以实际 GitHub Pages 结果为准。
+源码在 `main` 分支，生成站点在 `gh-pages` 分支。GitHub Pages 自动构建与部署已成功。更新源码后需重新运行 `npm run build:pages`，将生成页面更新到 `gh-pages` 才会更新公开网站；只推送 `main` 不会更改已发布页面。
+
+公网首页和所有页面、样式、脚本、图片及简历文件均以保留 TLS 校验的请求检查，并与本地已完成浏览器功能检查的构建逐文件对比。云环境的 Chromium 直接访问公网遇到证书信任错误；没有关闭 TLS 校验或修改证书信任来跳过该错误。普通静态服务器上的桌面与窄屏浏览器功能检查通过。
