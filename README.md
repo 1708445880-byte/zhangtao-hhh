@@ -1,6 +1,6 @@
 # ZHANG TAO — Selected Works
 
-张涛舞台视觉设计作品集。暖灰底色、炭黑图片区与低饱和砂色标记；紧凑的图片索引、桌面侧栏、分类快捷入口和缩略图/列表切换。全部站内路径、图片与简历文件名为英文。使用 Vite 和原生 JavaScript，无后端或第三方字体请求。
+张涛舞台视觉设计作品集。白色底色、浅灰区块与少量金色标记；紧凑的图片索引、桌面侧栏、分类快捷入口和缩略图/列表切换。图标使用内联 SVG，手机和桌面采用同一套线条。全部站内路径、图片与简历文件名为英文。使用 Vite 和原生 JavaScript，无后端或第三方字体请求。
 
 ## 内容
 
@@ -30,15 +30,24 @@ GitHub Pages 子目录部署：`npm run build:pages`，站点基路径为 `/zhan
 - `public/images/`：PDF 中的 WebP 图像。
 - `public/files/resume.pdf`：原简历和项目索引。
 
+## 图片加载
+
+`public/images/` 保留原始 WebP，点开放大时才请求原图。首页和图库使用 240 / 480 / 800px 的预览、`srcset` 与 `sizes`，预留图片尺寸并延迟加载屏幕外图像。失败请求会自动重试两次，仍未加载的图片可以手动重新加载；网络恢复也会触发重试。放大查看先显示预览，原图加载成功后再替换。
+
+预览和 `src/image-manifest.json` 已纳入版本管理，常规构建无额外依赖。新增或替换原图后，安装 Pillow 并运行 `python scripts/prepare-images.py` 重新生成。
+
 ## 验证
 
 运行中的开发服务或生产预览可用 Python Playwright 与 Chromium 执行检查：
 
 ```bash
 python scripts/browser-check.py
+python scripts/media-check.py
 ```
 
 可通过 `PORTFOLIO_TEST_URL` 设置测试地址。已检查 7 种首页宽度、16 个项目直接访问及图库、4 类筛选、图片放大与关闭、历史返回、简历下载、微信复制和 JavaScript 错误。
+
+媒体检查模拟 390px、3 倍像素密度手机和 1.5 Mbps / 300ms 网络：首页全部图片请求约 573KB，比相同作品的原图约 2.33MB 减少 75%。另检查 SVG 图标、白灰背景、连续请求失败后的自动与手动重试、网络恢复补载，以及预览切换到高清原图。
 
 为验证 GitHub Pages 子目录，使用普通 Python 静态服务器承载 `/zhangtao-hhh/` 构建；再以 `PORTFOLIO_STATIC=1` 运行上述检查。检查结果和截图写入已忽略的 `artifacts/`。窄屏 Chromium 检查不等同于 iOS Safari 真机测试。
 
