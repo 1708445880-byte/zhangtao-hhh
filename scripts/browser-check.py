@@ -17,7 +17,7 @@ with sync_playwright() as p:
     page = browser.new_page(viewport={'width': 1440, 'height': 1080}, permissions=['clipboard-read', 'clipboard-write'])
     page.on('pageerror', lambda e: report['errors'].append(str(e)))
     page.goto(base, wait_until='networkidle')
-    expect(page.locator('.project-card')).to_have_count(16)
+    expect(page.locator('.project-card')).to_have_count(18)
     for width in [320, 375, 390, 600, 768, 1024, 1440]:
         page.set_viewport_size({'width': width, 'height': 1080})
         assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), f'Home overflow at {width}px'
@@ -30,14 +30,14 @@ with sync_playwright() as p:
     page.screenshot(path=str(output / 'mobile.png'), full_page=True)
     page.screenshot(path=str(output / 'mobile-top.png'))
     page.locator('.hero-route [data-quick-filter="lighting"]').click()
-    expect(page.locator('.project-card')).to_have_count(7)
-    expect(page.locator('#project-count')).to_have_text('07 / 16 个项目')
+    expect(page.locator('.project-card')).to_have_count(8)
+    expect(page.locator('#project-count')).to_have_text('08 / 18 个项目')
     page.locator('[data-view="list"]').click()
     expect(page.locator('#project-grid')).to_have_class('project-grid list-view')
     assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), 'Mobile list overflow'
     page.locator('[data-view="grid"]').click()
     expect(page.locator('#project-grid')).to_have_class('project-grid')
-    for category, count in [('lighting', 7), ('previsualization', 4), ('theatre', 5), ('all', 16)]:
+    for category, count in [('lighting', 8), ('previsualization', 5), ('theatre', 5), ('all', 18)]:
         page.locator(f'[data-filter="{category}"]').click()
         expect(page.locator('.project-card')).to_have_count(count)
         expect(page.locator(f'[data-filter="{category}"]')).to_have_attribute('aria-pressed', 'true')
@@ -60,17 +60,17 @@ with sync_playwright() as p:
     page.locator('#project-selector').select_option(label='02 / 星海之汐')
     expect(page).to_have_url(base + '/work/star-tide')
     page.locator('.page-rail [data-quick-filter="previsualization"]').click()
-    expect(page.locator('.project-card')).to_have_count(4)
+    expect(page.locator('.project-card')).to_have_count(5)
     expect(page.locator('[data-filter="previsualization"]')).to_have_attribute('aria-pressed', 'true')
     page.locator('[data-filter="all"]').click()
     page.goto(base, wait_until='networkidle')
     page.locator('a.project-card[href$="/work/star-tide"]').click()
     expect(page).to_have_url(base + '/work/star-tide')
     page.locator('.back-link').click()
-    expect(page.locator('.project-card')).to_have_count(16)
+    expect(page.locator('.project-card')).to_have_count(18)
     page.locator('a.project-card[href$="/work/star-tide"]').click()
     page.go_back()
-    expect(page.locator('.project-card')).to_have_count(16)
+    expect(page.locator('.project-card')).to_have_count(18)
     page.locator('.site-header nav a').nth(1).click()
     expect(page).to_have_url(base + '/#about')
     expect(page.locator('.education')).to_contain_text('中央戏剧学院')
@@ -91,4 +91,4 @@ with sync_playwright() as p:
     browser.close()
 
 (output / 'validation.json').write_text(json.dumps(report, ensure_ascii=False, indent=2))
-print('PASS: 7 screen widths and compact images; 16 project routes; category shortcuts; grid/list switch; project selector; zoom + Escape; history; résumé PDF; contact copy; no JS errors.')
+print('PASS: 7 screen widths and compact images; 18 project routes; category shortcuts; grid/list switch; project selector; zoom + Escape; history; résumé PDF; contact copy; no JS errors.')

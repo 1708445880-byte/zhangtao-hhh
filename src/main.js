@@ -28,7 +28,7 @@ function renderRail(project) {
       <a href="${siteUrl('/#contact')}" data-section="contact"><span>03</span> 联系方式 ${icon}</a>
     </nav>
     <div class="rail-categories"><p class="eyebrow">按类型浏览</p>${categories.map(([id, name]) => `<button type="button" data-quick-filter="${id}" aria-pressed="${id === filter}">${name}<span>${String(countOf(id)).padStart(2, '0')}</span></button>`).join('')}</div>
-    <details class="rail-index"><summary>项目目录 <span>16 ${svgIcon('plus')}</span></summary><nav aria-label="项目目录">${projects.map(p => `<a href="${siteUrl(`/work/${p.id}`)}" ${p === project ? 'aria-current="page"' : ''}><span>${numberOf(p)}</span>${p.title}</a>`).join('')}</nav></details>
+    <details class="rail-index"><summary>项目目录 <span>${projects.length} ${svgIcon('plus')}</span></summary><nav aria-label="项目目录">${projects.map(p => `<a href="${siteUrl(`/work/${p.id}`)}" ${p === project ? 'aria-current="page"' : ''}><span>${numberOf(p)}</span>${p.title}</a>`).join('')}</nav></details>
     <div class="rail-note"><span class="rail-mark" aria-hidden="true">ZT /</span><p>张涛<br>舞台视觉设计</p><span>中央戏剧学院 · 舞台美术系</span></div>`;
 }
 

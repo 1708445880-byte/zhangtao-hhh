@@ -1,7 +1,15 @@
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, copyFile } from 'node:fs/promises';
 import { projects } from '../src/projects.js';
 
 const html = await readFile('dist/index.html', 'utf8');
+// Old image URLs stay valid for visitors still running a cached earlier page.
+const legacyImages = { 'd03-1': 'd03-1-full', 'd04-3': 'd04-3-full' };
+for (const [oldName, fullName] of Object.entries(legacyImages)) {
+  await copyFile(`dist/images/${fullName}.webp`, `dist/images/${oldName}.webp`);
+  for (const size of [240, 480, 800]) {
+    await copyFile(`dist/images/previews/${fullName}-${size}.webp`, `dist/images/previews/${oldName}-${size}.webp`);
+  }
+}
 const routes = ['work', 'about', ...projects.map(p => `work/${p.id}`)];
 for (const route of routes) {
   await mkdir(`dist/${route}`, { recursive: true });
