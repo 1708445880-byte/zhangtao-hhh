@@ -1,4 +1,5 @@
 import { projects } from './projects.js';
+import { experience } from './experience.js';
 import { imageTag, svgIcon, setupImageRecovery } from './media.js';
 
 const base = import.meta.env.BASE_URL;
@@ -48,8 +49,7 @@ function home() {
       <div class="work-toolbar"><div class="filter-bar" role="group" aria-label="作品分类">${categories.map(([id, name]) => `<button type="button" class="filter ${id === filter ? 'active' : ''}" data-filter="${id}" aria-pressed="${id === filter}">${name}<span>${String(countOf(id)).padStart(2, '0')}</span></button>`).join('')}</div><div class="view-toggle" role="group" aria-label="作品排列"><button type="button" data-view="grid" aria-pressed="${view === 'grid'}" aria-label="缩略图排列">${svgIcon('grid')}</button><button type="button" data-view="list" aria-pressed="${view === 'list'}" aria-label="列表排列">${svgIcon('list')}</button></div></div>
       <div class="index-meta"><span id="project-count" role="status"></span><span>项目 / 工作类型 / 图像</span></div><div class="project-grid" id="project-grid"></div>
     </section>
-    <section class="about section-pad" id="about"><div class="about-label"><p class="eyebrow">02 / ABOUT</p>${imageTag('/images/c02-1.webp', '张涛手持相机的黑白肖像', { className: 'portrait', sizes: '(max-width: 359px) 76px, (max-width: 600px) 90px, 160px' })}<p class="portrait-caption">ZHANG TAO / STAGE VISUAL DESIGN</p><a class="resume-link" href="${siteUrl('/files/resume.pdf')}" download="zhang-tao-resume.pdf">简历与项目索引 <span>PDF ${svgIcon('down')}</span></a></div><div class="about-content"><h2>张涛 <span>Zhang Tao</span></h2><p class="about-intro">舞台视觉设计。</p><p class="education">中央戏剧学院 <span>舞台美术系</span></p><p class="about-description">从舞台模型与灯光预演，到现场编程与还原。作品涵盖剧场、文旅街区、光影秀与空间灯光装置。</p><div class="recognition"><div><span>模型收藏</span><p>《特洛伊人》剧目微缩模型<br>国家大剧院舞美博物馆</p></div><div><span>模型展出</span><p>《星海之汐》晚会设计模型<br>大同东南邑美术馆</p></div></div><dl class="practice-list"><div><dt>01</dt><dd>舞美与三维预演<span>Stage & Previsualization</span></dd></div><div><dt>02</dt><dd>灯光设计与编程<span>Lighting & Programming</span></dd></div><div><dt>03</dt><dd>现场视觉呈现<span>Live Performance</span></dd></div></dl><div class="tools"><span class="eyebrow">制作工具</span><p>Blender · Unreal Engine 5 · Depence<br>After Effects · Photoshop · CAD</p></div></div></section>
-    <section class="experience section-pad"><details><summary><span class="eyebrow">EXPERIENCE</span><span>其他项目经历</span><span class="expand-icon" aria-hidden="true">${svgIcon('plus')}</span></summary><div class="experience-list">${[['新疆喜宴婚礼堂', '灯光设计'], ['温都水城 · 水岸艺术区', '街区灯光设计'], ['宁波十里红妆博物馆', '场馆灯光'], ['中央戏剧学院校园歌手大赛', '舞台灯光设计'], ['图兰朵 / 尼伯龙根的指环', '2021 年度院级重点项目 · 剧目还原'], ['大戏东望开幕式', '灯光操作'], ['西便门古城墙改造项目', '灯光设计'], ['三姊妹', '话剧预演'], ['2024 北京国际车展', '大众汽车展区 AI 交互区']].map(([title, role]) => `<div><h3>${title}</h3><span>${role}</span></div>`).join('')}</div></details></section>
+    <section class="about section-pad" id="about"><div class="about-label"><p class="eyebrow">02 / ABOUT</p>${imageTag('/images/c02-1.webp', '张涛手持相机的黑白肖像', { className: 'portrait', sizes: '(max-width: 359px) 76px, (max-width: 600px) 90px, 160px' })}<p class="portrait-caption">ZHANG TAO / STAGE VISUAL DESIGN</p><a class="resume-link" href="${siteUrl('/files/resume.pdf')}" download="zhang-tao-resume.pdf">简历与项目索引 <span>PDF ${svgIcon('down')}</span></a></div><div class="about-content"><h2>张涛 <span>Zhang Tao</span></h2><p class="about-intro">舞台视觉设计。</p><p class="education">中央戏剧学院 <span>舞台美术系</span></p><p class="about-description">从舞台模型与灯光预演，到现场编程与还原。作品涵盖剧场、文旅街区、光影秀与空间灯光装置。</p><dl class="practice-list"><div><dt>01</dt><dd>舞美与三维预演<span>Stage & Previsualization</span></dd></div><div><dt>02</dt><dd>灯光设计与编程<span>Lighting & Programming</span></dd></div><div><dt>03</dt><dd>现场视觉呈现<span>Live Performance</span></dd></div></dl><div class="tools"><span class="eyebrow">制作工具</span><p>Blender · Unreal Engine 5 · Depence<br>After Effects · Photoshop · CAD</p></div></div><div class="experience"><details id="experience-details"><summary><span class="eyebrow">EXPERIENCE</span><span>作品履历 <small>${experience.length} 项</small></span><span class="experience-action"><span class="when-closed">展开全部</span><span class="when-open">收起全部</span></span><span class="expand-icon" aria-hidden="true">${svgIcon('plus')}</span></summary><div class="experience-list">${experience.map(entry => `<div><h3>${entry.projectId ? `<a href="${siteUrl(`/work/${entry.projectId}`)}">${entry.title} ${icon}</a>` : entry.title}</h3><span>${entry.role}</span>${entry.note ? `<p>${entry.note}</p>` : ''}</div>`).join('')}</div></details></div></section>
     <section class="contact section-pad" id="contact"><p class="eyebrow">03 / CONTACT</p><div class="contact-heading"><h2>联系张涛 <span>Let’s talk.</span></h2><p>舞台视觉 / 灯光设计 / 预演</p></div><div class="contact-list"><a href="mailto:tao_0706@foxmail.com"><span>邮箱 / EMAIL</span><strong>tao_0706@foxmail.com</strong>${icon}</a><a href="tel:+8615091261041"><span>电话 / PHONE</span><strong>150 9126 1041</strong>${icon}</a><button id="copy-wechat" type="button"><span>微信 / WECHAT</span><strong>zt15091261041</strong><span class="copy-label">复制 ${svgIcon('copy')}</span></button></div><p class="copy-status" role="status" aria-live="polite"></p></section>`;
   renderGrid();
   document.querySelector('#copy-wechat').addEventListener('click', async () => {
@@ -83,42 +83,77 @@ function detail(p) {
   const next = projects[(projects.indexOf(p) + 1) % projects.length];
   const previous = projects[(projects.indexOf(p) + projects.length - 1) % projects.length];
   app.innerHTML = `<article class="project-detail section-pad"><div class="detail-toolbar"><a class="back-link" href="${siteUrl('/#work')}">${svgIcon('left')} 作品索引</a><label class="project-switch">切换项目<select id="project-selector" aria-label="切换项目">${projects.map(x => `<option value="${siteUrl(`/work/${x.id}`)}" ${x === p ? 'selected' : ''}>${numberOf(x)} / ${x.title}</option>`).join('')}</select></label></div><div class="detail-heading"><div><p class="eyebrow">${p.label} / ${p.en.toUpperCase()}</p><h1>${p.title}</h1></div><span class="detail-number">${numberOf(p)}<small> / ${projects.length}</small></span></div><div class="detail-workbench"><div class="detail-visual"><button class="cover-open" type="button" data-image="${p.cover}" data-caption="${p.title} · 主图" aria-label="放大${p.title}主图">${imageTag(p.cover, `${p.title}项目主视觉`, { className: 'detail-cover', sizes: '(max-width: 600px) 220px, (max-width: 980px) 280px, 350px', eager: true, priority: true })}${icon}</button><span class="cover-note">主图 / 点击放大</span></div><div class="detail-summary"><h2>${p.type}</h2>${p.description ? `<p class="detail-description">${p.description}</p>` : ''}<dl>${p.role ? `<div><dt>工作内容</dt><dd>${p.role}</dd></div>` : ''}${p.tools ? `<div><dt>制作工具</dt><dd>${p.tools}</dd></div>` : ''}<div><dt>图像来源</dt><dd>${p.source}</dd></div></dl><a class="gallery-jump" href="#gallery">浏览图像 <span>${String(p.images.length).padStart(2, '0')} ${svgIcon('down')}</span></a></div></div><div class="gallery-title" id="gallery"><div><span class="eyebrow">PROJECT GALLERY</span><h2>图像档案 <small>${p.images.length} 张</small></h2></div><span>点击缩略图放大</span></div><div class="detail-gallery">${p.images.map((src, i) => `<button class="gallery-image" type="button" data-image="${src}" data-caption="${p.title} · ${p.caption ? p.caption(i) : '图'} ${i + 1}" aria-label="放大${p.title}图${i + 1}">${imageTag(src, `${p.title} · ${p.caption ? p.caption(i) : '图'} ${i + 1}`, { sizes: gallerySizes })}<span><span>${String(i + 1).padStart(2, '0')} / ${p.caption ? p.caption(i) : p.label}</span>${svgIcon('plus')}</span></button>`).join('')}</div><div class="project-pagination"><a href="${siteUrl(`/work/${previous.id}`)}"><small>${svgIcon('left')} 上一个项目</small><span>${previous.title}</span></a><a class="next-project" href="${siteUrl(`/work/${next.id}`)}"><small>下一个项目 ${svgIcon('right')}</small><span>${next.title}</span></a></div></article>`;
-  document.querySelectorAll('[data-image]').forEach(el => el.addEventListener('click', () => openLightbox(el.dataset.image, el.dataset.caption)));
+  document.querySelectorAll('[data-image]').forEach(el => el.addEventListener('click', () => openLightbox(p, p.images.indexOf(el.dataset.image))));
   document.querySelector('#project-selector').addEventListener('change', e => { history.pushState({}, '', e.target.value); route(); window.scrollTo(0, 0); });
 }
 
-function openLightbox(src, caption) {
+function openLightbox(project, initialIndex) {
+  const images = project.images;
+  let index = Math.max(0, initialIndex);
+  let generation = 0;
+  let retryTimer;
+  let attempts = 0;
   const dialog = document.createElement('dialog');
   dialog.className = 'lightbox';
-  dialog.innerHTML = `<div class="lightbox-bar"><span>${caption}</span><div class="lightbox-tools"><span class="lightbox-progress" role="status">加载高清图片…</span><button class="lightbox-retry" type="button" hidden>重试高清图片</button><button class="lightbox-close" type="button" aria-label="关闭图片">关闭 ${svgIcon('close')}</button></div></div>${imageTag(src, caption, { sizes: '800px', eager: true, priority: true })}`;
-  document.body.append(dialog); dialog.showModal(); document.body.classList.add('modal-open');
+  dialog.setAttribute('aria-label', `${project.title}图片查看器`);
+  dialog.innerHTML = `<div class="lightbox-bar"><span class="lightbox-caption" aria-live="polite"></span><div class="lightbox-tools"><span class="lightbox-progress" role="status"></span><button class="lightbox-retry" type="button" hidden>重试高清图片</button><button class="lightbox-close" type="button" aria-label="关闭图片">关闭 ${svgIcon('close')}</button></div></div><div class="lightbox-stage"></div><nav class="lightbox-navigation" aria-label="图片切换"><button class="lightbox-previous" type="button" aria-label="上一张图片">${svgIcon('left')} 上一张</button><span class="lightbox-counter" aria-live="polite" aria-atomic="true"></span><button class="lightbox-next" type="button" aria-label="下一张图片">下一张 ${svgIcon('right')}</button></nav>`;
   const status = dialog.querySelector('.lightbox-progress');
   const retry = dialog.querySelector('.lightbox-retry');
-  let attempts = 0;
+  const stage = dialog.querySelector('.lightbox-stage');
   function loadOriginal() {
+    clearTimeout(retryTimer);
+    const currentGeneration = ++generation;
+    const image = stage.querySelector('img');
     retry.hidden = true;
     status.textContent = '加载高清图片…';
     const full = new Image();
     full.decoding = 'async';
+    const isCurrent = () => dialog.isConnected && currentGeneration === generation;
     full.onload = () => {
-      if (!dialog.isConnected) return;
-      const image = dialog.querySelector('img');
-      image.removeAttribute('srcset');
-      image.src = full.src;
+      if (!isCurrent()) return;
+      full.alt = image.alt;
+      full.setAttribute('width', image.getAttribute('width'));
+      full.setAttribute('height', image.getAttribute('height'));
+      image.replaceWith(full);
       status.textContent = '高清图片';
     };
     full.onerror = () => {
-      if (!dialog.isConnected) return;
-      if (attempts++ < 1) setTimeout(loadOriginal, 600);
+      if (!isCurrent()) return;
+      if (attempts++ < 1) retryTimer = setTimeout(loadOriginal, 600);
       else { status.textContent = '高清图片暂未载入'; retry.hidden = false; }
     };
-    full.src = siteUrl(src) + (attempts ? `?retry=${Date.now()}` : '');
+    full.src = siteUrl(images[index]) + (attempts ? `?retry=${Date.now()}` : '');
   }
+  function showImage(nextIndex) {
+    index = (nextIndex + images.length) % images.length;
+    const caption = `${project.title} · ${project.caption ? project.caption(index) : '图'} ${index + 1}`;
+    dialog.querySelector('.lightbox-caption').textContent = caption;
+    dialog.querySelector('.lightbox-counter').textContent = `${String(index + 1).padStart(2, '0')} / ${String(images.length).padStart(2, '0')}`;
+    stage.innerHTML = imageTag(images[index], caption, { sizes: '(max-width: 600px) 90vw, 800px', eager: true, priority: true });
+    attempts = 0;
+    loadOriginal();
+  }
+  dialog.querySelector('.lightbox-previous').addEventListener('click', () => showImage(index - 1));
+  dialog.querySelector('.lightbox-next').addEventListener('click', () => showImage(index + 1));
+  dialog.addEventListener('keydown', event => {
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      event.preventDefault();
+      showImage(index + (event.key === 'ArrowLeft' ? -1 : 1));
+    }
+  });
   retry.addEventListener('click', () => { attempts = 0; loadOriginal(); });
-  loadOriginal();
   dialog.querySelector('.lightbox-close').addEventListener('click', () => dialog.close());
-  dialog.addEventListener('click', e => { if (e.target === dialog) dialog.close(); });
-  dialog.addEventListener('close', () => { document.body.classList.remove('modal-open'); dialog.remove(); });
+  dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+  dialog.addEventListener('close', () => {
+    generation++;
+    clearTimeout(retryTimer);
+    document.body.classList.remove('modal-open');
+    dialog.remove();
+  });
+  document.body.append(dialog);
+  showImage(index);
+  dialog.showModal();
+  document.body.classList.add('modal-open');
 }
 
 function observeSections(project) {

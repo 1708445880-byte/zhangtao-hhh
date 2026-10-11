@@ -53,6 +53,23 @@ with sync_playwright() as p:
             assert page.locator('.gallery-image img').first.evaluate('(e)=>e.clientHeight') <= 200, f'Oversized gallery at {url}, {width}px'
         page.locator('.gallery-image').first.click()
         expect(page.locator('dialog')).to_be_visible()
+        total = page.locator('.gallery-image').count()
+        expect(page.locator('.lightbox-counter')).to_have_text(f'01 / {total:02}')
+        page.locator('.lightbox-next').click()
+        expect(page.locator('.lightbox-counter')).to_have_text(f'02 / {total:02}')
+        expect(page.locator('dialog img')).to_have_attribute('alt', page.locator('.gallery-image img').nth(1).get_attribute('alt'))
+        page.keyboard.press('ArrowLeft')
+        expect(page.locator('.lightbox-counter')).to_have_text(f'01 / {total:02}')
+        page.locator('.lightbox-previous').click()
+        expect(page.locator('.lightbox-counter')).to_have_text(f'{total:02} / {total:02}')
+        page.keyboard.press('ArrowRight')
+        expect(page.locator('.lightbox-counter')).to_have_text(f'01 / {total:02}')
+        for width in [320, 390, 768, 1440]:
+            page.set_viewport_size({'width': width, 'height': 844})
+            assert page.locator('dialog').evaluate('(e)=>e.scrollWidth <= e.clientWidth'), f'Viewer overflow at {url}, {width}px'
+            for button in ['.lightbox-previous', '.lightbox-next']:
+                assert page.locator(button).evaluate('(e)=>e.getBoundingClientRect().height >= 44'), 'Small touch target'
+                assert page.locator(button).evaluate('(e)=>{const r=e.getBoundingClientRect();return r.top>=0 && r.bottom<=innerHeight}'), f'Navigation button outside viewport: {url}'
         page.keyboard.press('Escape')
         expect(page.locator('dialog')).to_have_count(0)
         assert not page.evaluate('document.body.classList.contains("modal-open")'), f'Scroll lock remains: {url}'
@@ -74,6 +91,20 @@ with sync_playwright() as p:
     page.locator('.site-header nav a').nth(1).click()
     expect(page).to_have_url(base + '/#about')
     expect(page.locator('.education')).to_contain_text('中央戏剧学院')
+    expect(page.locator('.recognition')).to_have_count(0)
+    expect(page.locator('.experience details')).to_have_count(1)
+    expect(page.locator('.experience-list')).to_be_hidden()
+    page.locator('.experience summary').click()
+    expect(page.locator('.experience-list')).to_be_visible()
+    expect(page.locator('.experience-list > div')).to_have_count(27)
+    expect(page.locator('.experience-list a')).to_have_count(18)
+    expect(page.locator('.experience-list')).to_contain_text('国家大剧院舞美博物馆')
+    expect(page.locator('.experience-list')).to_contain_text('大同东南邑美术馆')
+    for width in [320, 390, 768, 1440]:
+        page.set_viewport_size({'width': width, 'height': 844})
+        assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), f'Expanded résumé overflow at {width}px'
+    page.locator('.experience summary').click()
+    expect(page.locator('.experience-list')).to_be_hidden()
     expect(page.locator('a[href="mailto:tao_0706@foxmail.com"]')).to_have_count(1)
     page.locator('#copy-wechat').click()
     expect(page.locator('.copy-status')).to_have_text('微信号已复制。')
@@ -91,4 +122,4 @@ with sync_playwright() as p:
     browser.close()
 
 (output / 'validation.json').write_text(json.dumps(report, ensure_ascii=False, indent=2))
-print('PASS: 7 screen widths and compact images; 18 project routes; category shortcuts; grid/list switch; project selector; zoom + Escape; history; résumé PDF; contact copy; no JS errors.')
+print('PASS: 7 screen widths; 18 galleries with previous/next, keyboard, wraparound and mobile touch targets; unified 27-entry résumé disclosure; filters; history; PDF; no JS errors.')

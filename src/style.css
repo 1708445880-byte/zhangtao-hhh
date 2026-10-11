@@ -149,10 +149,6 @@ summary::-webkit-details-marker { display: none; }
 .education { font-size: 12px; margin: 0 0 16px; }
 .education > span { color: var(--muted); margin-left: 12px; }
 .about-description { font-size: 11px; line-height: 2; margin: 0; max-width: 480px; }
-.recognition { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin: 22px 0; }
-.recognition > div { border-top: 1px solid var(--panel-line); padding-top: 13px; }
-.recognition > div > span { font-size: 9px; color: var(--muted); }
-.recognition p { font-size: 10px; line-height: 1.9; margin: 9px 0 0; }
 .practice-list { margin: 20px 0; }
 .practice-list > div { display: flex; gap: 18px; border-top: 1px solid var(--panel-line); padding: 14px 0; }
 .practice-list > div:last-child { border-bottom: 1px solid var(--panel-line); }
@@ -161,15 +157,24 @@ summary::-webkit-details-marker { display: none; }
 .practice-list dd > span { font-size: 9px; color: var(--muted); }
 .tools { display: flex; justify-content: space-between; gap: 20px; }
 .tools p { font-size: 9px; line-height: 1.9; margin: 0; }
-.experience { padding: 22px 0; border-bottom: 1px solid var(--line); }
+.experience { grid-column: 1 / -1; padding: 8px 0 0; border-top: 1px solid var(--panel-line); }
 .experience summary { display: flex; align-items: center; gap: 22px; min-height: 44px; list-style: none; }
 .experience summary > span:nth-child(2) { font-size: 13px; }
+.experience summary small { margin-left: 8px; font-size: 10px; color: var(--muted); }
+.experience-action { margin-left: auto; font-size: 10px; color: var(--accent); white-space: nowrap; }
+.experience .expand-icon { margin-left: 0; }
+.experience .when-open, .experience details[open] .when-closed { display: none; }
+.experience details[open] .when-open { display: inline; }
 .expand-icon { font-size: 22px; margin-left: auto; }
 .experience details[open] .expand-icon { transform: rotate(45deg); }
 .experience-list { display: grid; grid-template-columns: 1fr 1fr; column-gap: 30px; margin-top: 20px; }
 .experience-list > div { border-top: 1px solid var(--line); padding: 17px 0; }
 .experience-list h3 { font-weight: 400; font-size: 12px; margin: 0 0 9px; }
 .experience-list > div > span { font-size: 10px; line-height: 1.8; color: var(--muted); }
+.experience-list h3 a { display: inline-flex; align-items: center; gap: 10px; min-height: 28px; }
+.experience-list h3 a:hover { color: var(--accent); }
+.experience-list h3 .ui-icon { width: 11px; height: 11px; color: var(--accent); }
+.experience-list p { font-size: 10px; line-height: 1.8; margin: 8px 0 0; color: var(--muted); }
 .contact { padding: 30px 0 10px; }
 .contact-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin: 16px 0 26px; }
 .contact-heading h2 { font-size: 25px; font-weight: 400; letter-spacing: 1px; margin: 0; }
@@ -225,7 +230,12 @@ summary::-webkit-details-marker { display: none; }
 .lightbox::backdrop { background: #171717eb; }
 .lightbox-bar { display: flex; align-items: center; justify-content: space-between; gap: 20px; font-size: 11px; padding-bottom: 16px; }
 .lightbox-bar button { background: var(--accent-soft); color: var(--ink); padding: 10px 15px; min-height: 43px; border: 0; }
-.lightbox img { max-height: calc(95dvh - 100px); object-fit: contain; }
+.lightbox-stage { display: grid; place-items: center; min-height: 160px; }
+.lightbox-stage img { max-height: calc(95dvh - 180px); object-fit: contain; }
+.lightbox-navigation { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 16px; border-top: 1px solid #ffffff30; padding-top: 12px; }
+.lightbox-navigation button { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-width: 110px; min-height: 44px; padding: 10px 16px; border: 1px solid var(--line-dark); background: var(--accent-soft); color: var(--ink); font-size: 11px; }
+.lightbox-navigation button:hover { background: #ffffff; }
+.lightbox-counter { font-size: 11px; font-variant-numeric: tabular-nums; color: #d5d1c9; white-space: nowrap; }
 .modal-open { overflow: hidden; }
 .not-found { min-height: 60vh; }
 .not-found h1 { font-size: 32px; font-weight: 400; }
@@ -337,15 +347,12 @@ summary::-webkit-details-marker { display: none; }
   .education { font-size: 10px; line-height: 1.8; }
   .education > span { display: block; margin-left: 0; }
   .about-description { font-size: 10px; line-height: 1.9; }
-  .recognition { grid-template-columns: 1fr; gap: 14px; margin: 18px 0; }
-  .recognition > div { padding-top: 10px; }
-  .recognition p { font-size: 9px; line-height: 1.9; }
   .practice-list > div { padding: 11px 0; gap: 12px; }
   .practice-list dd { display: block; font-size: 10px; line-height: 1.8; }
   .practice-list dd > span { display: block; font-size: 8px; }
   .tools { flex-direction: column; gap: 7px; }
   .tools p { font-size: 8px; line-height: 2; }
-  .experience { padding: 15px 0; }
+  .experience { padding: 8px 0 0; }
   .experience summary { gap: 16px; }
   .experience summary .eyebrow { font-size: 8px; }
   .experience summary > span:nth-child(2) { font-size: 12px; }
@@ -446,4 +453,11 @@ img[data-failed=true] { background: var(--soft); color: var(--muted); }
   .lightbox-bar { align-items: start; }
   .lightbox-tools { justify-content: flex-end; gap: 8px; flex-wrap: wrap; max-width: 65%; }
   .lightbox-progress { font-size: 8px; }
+  .lightbox-stage img { max-height: calc(95dvh - 220px); }
+  .lightbox-navigation { gap: 8px; margin-top: 12px; }
+  .lightbox-navigation button { min-width: 90px; padding: 10px; font-size: 10px; gap: 7px; }
+  .lightbox-counter { font-size: 10px; }
+  .experience summary { flex-wrap: wrap; gap: 10px; }
+  .experience summary > .eyebrow { width: 100%; }
+  .experience summary small { font-size: 9px; }
 }

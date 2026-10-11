@@ -13,6 +13,7 @@ base = os.environ.get('PORTFOLIO_TEST_URL', 'http://127.0.0.1:5173').rstrip('/')
 output = root / 'artifacts'
 output.mkdir(exist_ok=True)
 report = {}
+image_manifest = json.loads((root / 'src/image-manifest.json').read_text())
 
 with sync_playwright() as p:
     browser = p.chromium.launch(executable_path=shutil.which('chromium'), headless=True, args=['--no-sandbox'])
@@ -89,18 +90,29 @@ with sync_playwright() as p:
     # The viewer starts with a preview while the original is delayed.
     page.goto(base + '/work/star-tide', wait_until='networkidle')
     original_requests = []
-    page.route('**/images/a01-1.webp', lambda route: original_requests.append(route))
+    def delay_first_original(route):
+        original_requests.append(route)
+        if len(original_requests) > 1:
+            route.continue_()
+    page.route('**/images/a01-1.webp', delay_first_original)
     page.locator('.gallery-image').first.click()
     expect(page.locator('dialog img')).to_have_attribute('srcset', re.compile('previews/'))
     page.wait_for_function('document.querySelector("dialog img")?.naturalWidth>0')
     expect(page.locator('.lightbox-progress')).to_have_text('加载高清图片…')
     assert len(original_requests) == 1
+    # Navigate before the delayed original returns: it must not overwrite the next image.
+    page.locator('.lightbox-next').click()
+    page.wait_for_function('document.querySelector("dialog img")?.src.includes("/images/a01-2.webp") && !document.querySelector("dialog img")?.hasAttribute("srcset")')
     original_requests[0].continue_()
-    page.wait_for_function('document.querySelector("dialog img")?.src.includes("/images/a01-1.webp") && document.querySelector("dialog img")?.naturalWidth===1600')
+    page.wait_for_timeout(250)
+    assert '/images/a01-2.webp' in page.locator('dialog img').get_attribute('src'), 'Late original overwrote the current slide'
+    page.locator('.lightbox-previous').click()
+    page.wait_for_function('(width)=>document.querySelector("dialog img")?.src.includes("/images/a01-1.webp") && document.querySelector("dialog img")?.naturalWidth===width', arg=image_manifest['/images/a01-1.webp']['width'])
     expect(page.locator('.lightbox-progress')).to_have_text('高清图片')
     page.locator('.lightbox-close').click()
     expect(page.locator('dialog')).to_have_count(0)
     report['progressive_full_resolution_viewer'] = True
+    report['late_original_does_not_overwrite_next_slide'] = True
     assert not errors, errors
     context.close()
     browser.close()
